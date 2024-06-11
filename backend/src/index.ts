@@ -1,14 +1,28 @@
+import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
+
+import feedbackRoutes from './routes/feedback.routes';
+import FeedbackModel from './model/feedback.model';
+
+const { initializeModel } = FeedbackModel();
+
 dotenv.config();
 
-const addition = (a: number, b: number): number => {
-    return a + b;
-};
+const PORT = process.env.PORT || 3000;
 
-const number1: number = 5;
-const number2: number = 10;
-const result: number = addition(number1, number2);
+const app = express();
 
-console.log(`The application name is "${process.env.APP_NAME}"`);
+app.use(cors());
 
-console.log('The result is %d', result);
+app.use(feedbackRoutes);
+
+initializeModel()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running at http://localhost:${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.error('Failed to initialize model:', error);
+    });
