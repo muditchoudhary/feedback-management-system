@@ -23,7 +23,7 @@ const FeedbackController = () => {
 
     const submitFeedback = async (req: Request, res: Response) => {
         try {
-            const { name, feedback } = req.query;
+            const { name, feedback } = req.body;
             if (!name || !feedback) {
                 return res.status(400).json({
                     success: true,
